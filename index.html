@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAKA NEWS JAPAN — SmartNews-style</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#f4f5f7;
+  --card:#fff;
+  --text:#17181c;
+  --muted:#777b83;
+  --line:#e3e5e8;
+  --accent:#e33a32;
+  --soft:#f1f2f4;
+  --dark:#17191d
+}
+
+body{
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text)
+}
+
+button,input{
+  font:inherit
+}
+
+button{
+  cursor:pointer
+}
+
+/* HEADER */
+
+.header{
+  height:62px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  position:sticky;
+  top:0;
+  z-index:1000
+}
+
+.menu-btn,
+.search-btn{
+  width:38px;
+  height:38px;
+  border:0;
+  background:var(--soft);
+  border-radius:10px;
+  font-size:20px;
+  flex:0 0 auto
+}
+
+.menu-btn{
+  display:none;
+  margin-right:10px
+}
+
+.logo{
+  font-weight:950;
+  letter-spacing:-1.2px;
+  font-size:20px;
+  margin:0 24px 0 12px;
+  white-space:nowrap
+}
+
+.logo .ahoo{
+  color:#ff0033;
+  font-weight:950
+}
+
+.logo .japan{
+  color:#222;
+  font-weight:900
+}
+
+.logo small{
+  font-size:10px;
+  letter-spacing:.03em;
+  color:#777;
+  margin-left:7px;
+  font-weight:850
+}
+
+.header-right{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+.header-search{
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+.header-search input{
+  width:190px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:9px 13px;
+  outline:0;
+  background:#fafafa;
+  transition:.2s
+}
+
+.header-search input:focus{
+  border-color:#b9bdc4;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(0,0,0,.04)
+}
+
+.notif-btn{
+  width:38px;
+  height:38px;
+  border:0;
+  background:var(--soft);
+  border-radius:10px;
+  font-size:18px;
+  flex:0 0 auto;
+  position:relative;
+  transition:.15s
+}
+.notif-btn:hover{background:#e7e8ea}
+.notif-dot{
+  position:absolute;
+  top:7px;right:8px;
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--accent);
+  border:2px solid #fff
+}
+
+/* HORIZONTAL CHANNEL BAR */
+
+.horizontal-nav{
+  height:62px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  position:sticky;
+  top:62px;
+  z-index:900;
+  box-shadow:0 1px 2px rgba(0,0,0,.03)
+}
+
+.h-scroll{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  overflow-x:auto;
+  padding:0 15px;
+  scrollbar-width:none;
+  flex:1;
+  height:100%
+}
+
+.h-scroll::-webkit-scrollbar{
+  display:none
+}
+
+.h-channel{
+  --channel-bg:#eef2f6;
+  --channel-fg:#42464d;
+  border:1px solid transparent;
+  background:var(--channel-bg);
+  color:var(--channel-fg);
+  padding:10px 14px;
+  min-height:42px;
+  white-space:nowrap;
+  font-weight:800;
+  font-size:13px;
+  border-radius:13px;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+  transition:all .18s ease;
+  box-shadow:0 1px 2px rgba(0,0,0,.04)
+}
+
+.h-channel .h-icon{
+  font-size:18px;
+  line-height:1
+}
+
+.h-channel:hover{
+  filter:saturate(1.08);
+  border-color:rgba(0,0,0,.08)
+}
+
+.h-channel.active{
+  padding:12px 17px;
+  min-height:50px;
+  font-size:15px;
+  font-weight:950;
+  border-color:rgba(0,0,0,.12);
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+  transform:translateY(-1px)
+}
+
+.h-count{
+  background:rgba(0,0,0,.1);
+  font-size:10px;
+  font-weight:900;
+  padding:2px 6px;
+  border-radius:8px;
+  margin-left:2px
+}
+
+.more-top{
+  border:0;
+  border-left:1px solid var(--line);
+  background:#fff;
+  height:100%;
+  padding:0 16px;
+  font-weight:850;
+  color:#555;
+  flex:0 0 auto
+}
+
+/* APP SHELL */
+
+.app-shell{
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:18px 20px 40px;
+  display:grid;
+  grid-template-columns:245px minmax(0,1fr) 310px;
+  gap:22px;
+  align-items:start
+}
+
+/* VERTICAL CHANNEL MENU */
+
+.vertical-menu{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px;
+  align-self:start;
+  position:sticky;
+  top:126px;
+  height:calc(100vh - 146px);
+  max-height:none;
+  overflow:auto;
+  box-shadow:0 1px 3px rgba(0,0,0,.04)
+}
+
+.vertical-title{
+  font-size:11px;
+  color:#969aa1;
+  font-weight:900;
+  letter-spacing:.1em;
+  padding:8px 9px 7px
+}
+
+.v-channel{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  border:0;
+  background:transparent;
+  text-align:left;
+  padding:8px 9px;
+  border-radius:9px;
+  color:#4f535a;
+  font-weight:700;
+  font-size:13px
+}
+
+.v-channel:hover,
+.v-channel.active{
+  background:#f0f1f3;
+  color:#111
+}
+
+.v-icon{
+  width:25px;
+  text-align:center;
+  font-size:17px
+}
+
+.v-count{
+  margin-left:auto;
+  font-size:10px;
+  font-weight:800;
+  color:#aaa;
+  background:#f0f1f3;
+  padding:2px 6px;
+  border-radius:7px
+}
+
+.manage{
+  width:100%;
+  border:0;
+  background:#f5f6f7;
+  border-radius:9px;
+  padding:10px;
+  margin-top:8px;
+  font-size:12px;
+  font-weight:800;
+  color:#555
+}
+
+/* MAIN */
+
+.main{
+  min-width:0
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:0 2px 10px
+}
+
+.section-head h1{
+  font-size:25px;
+  letter-spacing:-.04em
+}
+
+.refresh{
+  border:0;
+  background:transparent;
+  color:#777;
+  font-weight:750
+}
+
+.featured{
+  background:var(--dark);
+  color:#fff;
+  border-radius:15px;
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  min-height:265px;
+  margin-bottom:17px
+}
+
+.featured-copy{
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center
+}
+
+.eyebrow{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.13em;
+  color:var(--accent);
+  margin-bottom:10px
+}
+
+.featured h2{
+  font-size:32px;
+  line-height:1.04;
+  letter-spacing:-.045em;
+  margin-bottom:12px
+}
+
+.featured p{
+  color:#c1c5cb;
+  line-height:1.5;
+  font-size:14px
+}
+
+.meta{
+  font-size:11px;
+  color:#9da2aa;
+  margin-top:15px;
+  display:flex;
+  gap:7px
+}
+
+.featured-art{
+  min-height:265px;
+  background:linear-gradient(140deg,#fce4b8,#f5c89a);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.featured-emoji{
+  font-size:120px;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,.15));
+  animation:float 3s ease-in-out infinite
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+
+/* ARTICLES */
+
+.article{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:grid;
+  grid-template-columns:155px 1fr;
+  gap:15px;
+  padding:14px 0;
+  position:relative
+}
+
+.article:first-of-type{
+  border-top:1px solid var(--line)
+}
+
+.article-img{
+  height:104px;
+  border-radius:10px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center
+}
+
+.article-thumb-img{
+  width:100%;height:100%;object-fit:cover;border-radius:10px
+}
+
+.article-thumb{
+  font-size:48px;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.1))
+}
+
+.article-body{
+  display:flex;
+  flex-direction:column
+}
+
+.article h3{
+  font-size:17px;
+  line-height:1.23;
+  margin-bottom:6px
+}
+
+.article h3 a{
+  color:inherit;text-decoration:none
+}
+.article h3 a:hover{
+  text-decoration:underline
+}
+
+.article p{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.45;
+  margin-bottom:8px
+}
+
+.article-meta{
+  font-size:11px;
+  color:#92969d;
+  display:flex;
+  gap:7px;
+  align-items:center;
+  flex-wrap:wrap
+}
+
+.article-actions{
+  display:flex;
+  gap:4px;
+  margin-left:auto
+}
+
+.act-btn{
+  border:0;
+  background:transparent;
+  color:#b0b4bb;
+  font-size:16px;
+  width:30px;
+  height:26px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.15s
+}
+.act-btn:hover{background:#f0f1f3;color:#555}
+.act-btn.bookmarked{color:var(--accent)}
+
+.badge{
+  display:inline-block;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.05em;
+  padding:2px 7px;
+  border-radius:4px;
+  margin-right:6px;
+  vertical-align:middle
+}
+.badge-breaking{background:#ffe0e0;color:#c0392b}
+.badge-new{background:#e0f0ff;color:#2471a3}
+
+.read-time{
+  color:#aaa;
+  font-size:10px;
+  margin-left:4px
+}
+
+/* RIGHT */
+
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:14px
+}
+
+.side-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:17px
+}
+
+.side-card h3{
+  font-size:16px;
+  margin-bottom:10px
+}
+
+.trend{
+  display:grid;
+  grid-template-columns:27px 1fr;
+  gap:7px;
+  padding:11px 0;
+  border-top:1px solid var(--line);
+  font-size:13px;
+  line-height:1.35
+}
+
+.num{
+  color:#aaa;
+  font-weight:900
+}
+
+.brief{
+  background:#17191d;
+  color:#fff
+}
+
+.brief p{
+  color:#aeb3bb;
+  font-size:12px;
+  line-height:1.45;
+  margin:8px 0 13px
+}
+
+.sub-form{
+  display:flex;
+  gap:6px
+}
+
+.sub-form input{
+  flex:1;
+  border:1px solid #444;
+  border-radius:8px;
+  background:#2a2c30;
+  color:#fff;
+  padding:9px 11px;
+  font-size:13px;
+  outline:0
+}
+.sub-form input:focus{border-color:#666}
+.sub-form input::placeholder{color:#777}
+
+.sub-form button{
+  border:0;
+  border-radius:8px;
+  background:#fff;
+  padding:9px 14px;
+  font-weight:850;
+  font-size:13px;
+  white-space:nowrap;
+  transition:.15s
+}
+.sub-form button:hover{background:#f0f0f0}
+.sub-form button:disabled{opacity:.5;cursor:default}
+
+.sub-success{
+  text-align:center;
+  padding:8px 0
+}
+.sub-success .check-circle{
+  font-size:28px;
+  margin-bottom:4px
+}
+.sub-success p{
+  color:#8fbc8f;
+  font-size:13px;
+  font-weight:700
+}
+.sub-success small{
+  color:#777;
+  font-size:11px
+}
+
+/* TOAST */
+
+.toast-container{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+  pointer-events:none
+}
+
+.toast{
+  background:#222;
+  color:#fff;
+  padding:11px 20px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);
+  animation:toastIn .3s ease,toastOut .3s ease 2.2s forwards;
+  pointer-events:auto;
+  white-space:nowrap
+}
+
+@keyframes toastIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes toastOut{
+  from{opacity:1;transform:translateY(0)}
+  to{opacity:0;transform:translateY(-8px)}
+}
+
+/* NOTIFICATION PANEL */
+
+.notif-panel{
+  display:none;
+  position:fixed;
+  top:56px;
+  right:18px;
+  width:340px;
+  max-height:420px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.15);
+  z-index:1100;
+  overflow:hidden
+}
+.notif-panel.open{display:block}
+
+.notif-head{
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+.notif-head h3{font-size:15px}
+.notif-clear{
+  border:0;background:transparent;
+  color:var(--accent);font-size:12px;font-weight:800
+}
+
+.notif-list{
+  max-height:350px;
+  overflow:auto
+}
+
+.notif-item{
+  padding:12px 16px;
+  border-bottom:1px solid var(--line);
+  font-size:13px;
+  line-height:1.4;
+  display:flex;
+  gap:10px;
+  align-items:flex-start
+}
+.notif-item:last-child{border:0}
+.notif-icon{font-size:20px;flex:0 0 auto}
+.notif-text strong{display:block;font-size:12px;margin-bottom:2px}
+.notif-text span{color:#888;font-size:11px}
+
+/* DRAWER */
+
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.42);
+  z-index:2000
+}
+
+.drawer{
+  width:min(330px,88vw);
+  height:100%;
+  background:#fff;
+  overflow:auto;
+  padding:15px
+}
+
+.drawer-backdrop.open{
+  display:block
+}
+
+.drawer-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px
+}
+
+.drawer-head h2{
+  font-size:18px
+}
+
+.close{
+  border:0;
+  background:#f1f2f3;
+  width:34px;
+  height:34px;
+  border-radius:9px
+}
+
+/* CHANNEL MANAGER */
+
+.manager{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.46);
+  z-index:2500;
+  padding:28px 12px;
+  align-items:center;
+  justify-content:center
+}
+
+.manager.open{
+  display:flex
+}
+
+.manager-panel{
+  background:#fff;
+  width:min(620px,100%);
+  max-height:90vh;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 25px 80px rgba(0,0,0,.25)
+}
+
+.manager-top{
+  padding:16px;
+  border-bottom:1px solid var(--line);
+  text-align:center;
+  position:relative
+}
+
+.manager-top p{
+  font-size:12px;
+  color:#777;
+  margin-bottom:8px
+}
+
+.manager-top h2{
+  font-size:18px
+}
+
+.manager-close{
+  position:absolute;
+  right:12px;
+  top:11px;
+  border:0;
+  background:transparent;
+  font-size:24px;
+  color:#777
+}
+
+.manager-list{
+  max-height:calc(90vh - 112px);
+  overflow:auto
+}
+
+.manager-row{
+  display:grid;
+  grid-template-columns:27px 45px 1fr 25px;
+  gap:10px;
+  align-items:center;
+  padding:8px 13px;
+  min-height:64px;
+  border-bottom:1px solid var(--line);
+  cursor:grab;
+  background:#fff
+}
+
+.manager-row.dragging{
+  opacity:.45
+}
+
+.check{
+  font-size:22px
+}
+
+.micon{
+  width:40px;
+  height:40px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  background:#f0f1f3
+}
+
+.mname{
+  font-weight:850;
+  font-size:15px
+}
+
+.mdesc{
+  font-size:11px;
+  color:#8a8e94;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-top:2px
+}
+
+.handle{
+  font-size:19px;
+  color:#bbb;
+  text-align:center
+}
+
+.manager-more{
+  padding:12px 15px;
+  border-top:5px solid #f0f1f2;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:850
+}
+
+.plus{
+  width:37px;
+  height:37px;
+  border-radius:8px;
+  background:#31b6c8;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-size:27px
+}
+
+/* SEARCH */
+
+.search-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(10,11,13,.52);
+  z-index:2200;
+  padding-top:90px;
+  justify-content:center
+}
+
+.search-overlay.open{
+  display:flex
+}
+
+.search-box{
+  width:min(680px,calc(100% - 25px));
+  max-height:75vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:15px;
+  padding:18px;
+  box-shadow:0 25px 80px rgba(0,0,0,.25)
+}
+
+.search-box input{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px;
+  outline:0;
+  margin-bottom:5px
+}
+
+.search-box input:focus{
+  border-color:#aeb3bb;
+  box-shadow:0 0 0 3px rgba(0,0,0,.04)
+}
+
+.result{
+  padding:14px 4px;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+  transition:.15s
+}
+
+.result:hover{
+  background:#f7f7f8;
+  padding-left:8px;
+  padding-right:8px
+}
+
+.result strong{
+  display:block;
+  font-size:15px;
+  line-height:1.35;
+  margin-bottom:5px
+}
+
+.result small{
+  color:#888
+}
+
+.result-description{
+  font-size:12px;
+  color:#777;
+  margin-top:6px;
+  line-height:1.4
+}
+
+.no-results{
+  padding:25px 5px;
+  text-align:center;
+  color:#777
+}
+
+.search-close{
+  float:right;
+  border:0;
+  background:transparent;
+  font-size:23px;
+  margin-bottom:8px;
+  line-height:1
+}
+
+/* SEARCH ICON BUTTON */
+
+.search-btn{
+  transition:.15s
+}
+
+.search-btn:hover{
+  background:#e7e8ea
+}
+
+.search-btn:active{
+  transform:scale(.95)
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+
+  .app-shell{
+    grid-template-columns:215px minmax(0,1fr);
+    padding-left:16px;
+    padding-right:16px
+  }
+
+  .side{
+    display:none
+  }
+
+  .header-search input{
+    width:150px
+  }
+}
+
+@media(max-width:760px){
+
+  .menu-btn{
+    display:block
+  }
+
+  .logo{
+    margin-left:0;
+    margin-right:12px
+  }
+
+  .header-search input{
+    display:none
+  }
+
+  .horizontal-nav{
+    top:62px
+  }
+
+  .h-channel{
+    padding:9px 12px;
+    min-height:40px
+  }
+
+  .h-channel.active{
+    padding:11px 15px;
+    min-height:48px;
+    font-size:14px
+  }
+
+  .app-shell{
+    display:block;
+    width:100%;
+    padding:12px;
+    margin:0
+  }
+
+  .vertical-menu{
+    display:none
+  }
+
+  .featured{
+    grid-template-columns:1fr
+  }
+
+  .featured-art{
+    display:none
+  }
+
+  .featured-copy{
+    padding:25px
+  }
+
+  .featured h2{
+    font-size:29px
+  }
+
+  .article{
+    grid-template-columns:110px 1fr;
+    gap:12px
+  }
+
+  .article-img{
+    height:88px
+  }
+
+  .article p{
+    display:none
+  }
+
+  .h-channel{
+    padding:10px 12px;
+    font-size:13px
+  }
+
+  .h-count{display:none}
+
+  .more-top{
+    padding:0 12px
+  }
+
+  .search-overlay{
+    padding-top:70px
+  }
+
+  .notif-panel{
+    right:8px;
+    width:calc(100vw - 16px);
+    max-width:340px
+  }
+}
+
+@media(max-width:500px){
+
+  .header{
+    padding:0 10px
+  }
+
+  .logo{
+    font-size:18px
+  }
+
+  .logo small{
+    display:none
+  }
+
+  .section-head h1{
+    font-size:22px
+  }
+
+  .article{
+    grid-template-columns:1fr
+  }
+
+  .article-img{
+    height:145px
+  }
+
+  .article h3{
+    font-size:17px
+  }
+
+  .featured{
+    border-radius:12px
+  }
+
+  .featured-copy{
+    padding:22px
+  }
+
+  .search-box{
+    width:calc(100% - 18px);
+    max-height:80vh
+  }
+
+  .article-actions{
+    margin-left:0;
+    margin-top:4px
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header class="header">
+
+  <button class="menu-btn" id="openDrawer" aria-label="Open channels">☰</button>
+
+  <div class="logo">
+    <span class="ahoo">NANI!!</span>
+    <span class="japan">JAPAN</span>
+    <small>NEWS</small>
+  </div>
+
+  <div class="header-right">
+    <div class="header-search">
+      <input id="quickSearch" type="search" placeholder="Search news..." autocomplete="off" aria-label="Search news">
+      <button class="search-btn" id="openSearch" aria-label="Search">⌕</button>
+    </div>
+    <button class="notif-btn" id="notifBtn" aria-label="Notifications">
+      🔔
+      <span class="notif-dot" id="notifDot"></span>
+    </button>
+  </div>
+
+</header>
+
+
+<!-- NOTIFICATION PANEL -->
+
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-head">
+    <h3>Notifications</h3>
+    <button class="notif-clear" id="notifClear">Mark all read</button>
+  </div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
+
+<!-- HORIZONTAL MENU -->
+
+<nav class="horizontal-nav">
+  <div class="h-scroll" id="horizontalNav"></div>
+  <button class="more-top" id="openManager">＋ More</button>
+</nav>
+
+
+<!-- APP SHELL -->
+
+<div class="app-shell">
+
+  <!-- VERTICAL MENU -->
+
+  <aside class="vertical-menu">
+    <div class="vertical-title">CHANNELS</div>
+    <div id="verticalNav"></div>
+    <button class="manage" id="openManager2">☷ Manage channels</button>
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <div class="section-head">
+      <h1 id="sectionTitle">Top</h1>
+      <button class="refresh" id="refresh">Refresh ↻</button>
+    </div>
+
+
+    <!-- FEATURED -->
+
+    <section class="featured" id="featuredSection">
+      <div class="featured-copy">
+        <div class="eyebrow">TOP STORY</div>
+        <h2 id="featuredTitle" style="cursor:pointer" onclick="if(featuredMap[active]&&featuredMap[active][10])window.open(featuredMap[active][10],'_blank')">Japan's celebrity monkey Punch turns one</h2>
+        <p id="featuredDesc">The orphaned macaque became famous after clinging to an orangutan plush toy. For his first birthday, thousands of messages arrived from fans around the world.</p>
+        <div class="meta">
+          <span id="featuredSource">AP News</span>
+          <span>•</span>
+          <span>4 min read</span>
+        </div>
+      </div>
+      <div class="featured-art" id="featuredArt">
+        <img id="featuredImg" style="width:100%;height:100%;object-fit:cover;display:none" alt="" loading="lazy">
+        <div class="featured-emoji" id="featuredEmoji">🐒</div>
+      </div>
+    </section>
+
+
+    <!-- ARTICLE FEED -->
+
+    <div id="feed"></div>
+
+  </main>
+
+
+  <!-- RIGHT SIDEBAR -->
+
+  <aside class="side">
+
+    <div class="side-card">
+      <h3>Trending now</h3>
+      <div class="trend"><div class="num">01</div><div>Minnesota town unveils the world's tallest nutcracker at 66 feet</div></div>
+      <div class="trend"><div class="num">02</div><div>Two people parachute from Seattle's Space Needle</div></div>
+      <div class="trend"><div class="num">03</div><div>Wild boars are hunting rabbits on Japan's famous Rabbit Island</div></div>
+      <div class="trend"><div class="num">04</div><div>A German organ concert won't finish until the year 2640</div></div>
+    </div>
+
+    <div class="side-card brief">
+      <div class="eyebrow">DAILY BRIEF</div>
+      <h3>The weirdest news from Japan and beyond.</h3>
+      <p>Celebrity monkeys, rotten fish sauce, parachuting off landmarks, and vending machines that put on light shows.</p>
+      <div id="subArea">
+        <div class="sub-form">
+          <input type="email" id="subEmail" placeholder="you@email.com" aria-label="Email">
+          <button id="subBtn">Subscribe</button>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+
+<!-- MOBILE DRAWER -->
+
+<div class="drawer-backdrop" id="drawerBackdrop">
+  <aside class="drawer">
+    <div class="drawer-head">
+      <h2>Channels</h2>
+      <button class="close" id="closeDrawer">×</button>
+    </div>
+    <div id="drawerNav"></div>
+    <button class="manage" id="openManager3">☷ Manage channels</button>
+  </aside>
+</div>
+
+
+<!-- CHANNEL MANAGER -->
+
+<div class="manager" id="manager">
+  <div class="manager-panel">
+    <div class="manager-top">
+      <button class="manager-close" id="closeManager">×</button>
+      <p>Tap to remove / Hold and drag to reorder</p>
+      <h2>Manage Channels</h2>
+    </div>
+    <div class="manager-list" id="managerList"></div>
+    <div class="manager-more">
+      <div class="plus">＋</div>
+      <div>More channels</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- SEARCH OVERLAY -->
+
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-box">
+    <button class="search-close" id="closeSearch" aria-label="Close search">×</button>
+    <input id="searchInput" type="search" placeholder="Search stories..." autocomplete="off" aria-label="Search stories">
+    <div id="results"></div>
+  </div>
+</div>
+
+
+<!-- TOAST CONTAINER -->
+
+<div class="toast-container" id="toastContainer"></div>
+
+
+<script>
+
+/* =========================================================
+   TOAST SYSTEM
+========================================================= */
+
+function showToast(msg){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(),2600);
+}
+
+
+/* =========================================================
+   BOOKMARKS
+========================================================= */
+
+const bookmarks=new Set();
+
+function toggleBookmark(idx){
+  if(bookmarks.has(idx)){
+    bookmarks.delete(idx);
+    showToast('Bookmark removed');
+  }else{
+    bookmarks.add(idx);
+    showToast('Bookmarked \u2014 saved for later');
+  }
+  renderFeed();
+}
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+function shareArticle(idx){
+  const a=articles[idx];
+  const text=a[3]+' \u2014 '+a[1];
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast('Link copied to clipboard');
+    });
+  }else{
+    showToast('Shared: '+a[3].slice(0,30)+'...');
+  }
+}
+
+
+/* =========================================================
+   CHANNEL DATA
+========================================================= */
+
+const channels = [
+  {name:'Top',icon:'\u{1F4F0}',color:'#ffe3e8',fg:'#b4233c',desc:'The biggest stories, updated throughout the day'},
+  {name:'International',icon:'\u{1F310}',color:'#eadcff',fg:'#6f35b5',desc:'News and developments from around the world'},
+  {name:'Local',icon:'\u27A4',color:'#dff1ff',fg:'#1474a6',desc:'News and information from your local area'},
+  {name:'Coupons',icon:'\u{1F39F}\uFE0F',color:'#fff0bf',fg:'#9a6a00',desc:'Strange bargains, promotions and retail gimmicks'},
+  {name:'naniJAPAN+',icon:'\uFF0B',color:'#fff6a8',fg:'#766200',desc:'The actually-fascinating weird stuff'},
+  {name:'Entertainment',icon:'\u2B50',color:'#ffe7c7',fg:'#a65b00',desc:'Pop culture mashups and character crossovers'},
+  {name:'Sports',icon:'\u{1F3DF}\uFE0F',color:'#dcf5d7',fg:'#2d7a30',desc:'The strangest plays and competitions'},
+  {name:'Roundup',icon:'\u25C9',color:'#fff0bd',fg:'#9a7100',desc:'Maximum weirdness from around the world'},
+  {name:'Domestic',icon:'\u{1F1EF}\u{1F1F5}',color:'#f3f3f3',fg:'#444',desc:'The latest weird news from across Japan'},
+  {name:'Politics',icon:'\u{1F3DB}\uFE0F',color:'#fff0c9',fg:'#a66b00',desc:'Politics has never been this entertaining'},
+  {name:'Economy',icon:'\u{1F4C8}',color:'#d9f6f1',fg:'#147d73',desc:'The strangest ways money gets spent'},
+  {name:'Technology',icon:'\u2699\uFE0F',color:'#d9f0ff',fg:'#176b96',desc:'Tech that makes you do a double take'},
+  {name:'Infectious Disease',icon:'\u{1F4F0}',color:'#e8f7df',fg:'#4e8a35',desc:'Bizarre science and ecology stories'},
+  {name:'Topics',icon:'\u2B50',color:'#ffe4b8',fg:'#a66000',desc:'Interesting stories and topics to check out'},
+  {name:'Food',icon:'\u{1F374}',color:'#fff0d9',fg:'#a65d00',desc:"Japan's wildest food experiments"},
+  {name:'Columns',icon:'\u{1F4AC}',color:'#ffdff0',fg:'#a43c78',desc:'Weird ideas and human behavior'},
+  {name:'Animals',icon:'\u{1F43E}',color:'#e5f6df',fg:'#4b8435',desc:'Celebrity monkeys, bank deer and surfing dogs'},
+  {name:'Family',icon:'\u{1F46A}',color:'#fff0cf',fg:'#a36a00',desc:'Heartwarming animal families and campus babies'},
+  {name:'Careers',icon:'\u2197',color:'#d9f6f1',fg:'#177d73',desc:'Robot teachers and air-conditioned shirts'},
+  {name:'Living',icon:'\u{1F3E0}',color:'#ffead2',fg:'#a65d16',desc:'Human refrigerators and punishing beer glasses'},
+  {name:'Anime',icon:'\u{1F305}',color:'#ffe6c7',fg:'#a65e13',desc:'Ghibli plushies, festival collabs and kaiju crossovers'},
+  {name:'Love',icon:'\u{1F497}',color:'#ffe0ee',fg:'#ad3975',desc:'AI matchmaking and dating algorithm oddities'},
+  {name:'Points',icon:'\u{1F7E1}',color:'#fff4bd',fg:'#8d7200',desc:'Weird rewards, loyalty culture and novelty purchases'},
+  {name:'Apps',icon:'\u{1F916}',color:'#dff1ff',fg:'#2b6f98',desc:'AI matchmakers, flea-market bans and vending-machine apps'}
+];
+
+
+/* =========================================================
+   ARTICLE DATA
+   [channel, source, time, headline, description, emoji, gradient1, gradient2, badge]
+   badge: ''|'breaking'|'new'
+========================================================= */
+
+const articles = [
+  ['Top','AP News','18 min ago','Japan’s celebrity monkey Punch turns one','The orphaned macaque became famous after clinging to an orangutan plush toy. For his first birthday, thousands of messages arrived from fans around the world.','🐒','#fce4b8','#f5c89a','breaking','','https://abc7.com/post/japans-monkey-sensation-punch-gets-thousands-birthday-messages-he-turns-1-sunday/19579247/'],
+  ['Top','AP News','32 min ago','Minnesota town builds the world’s tallest nutcracker','Luverne unveiled a nearly 66-foot nutcracker named “Verne the Patriot,” complete with a working jaw.','🛡️','#e8d5f5','#c7b3e0','new','','https://abcnews.com/Weird/wireStory/minnesota-town-now-boasts-worlds-tallest-nutcracker-134944487'],
+  ['Top','AP News','1 hr ago','Real-life Spider-Man helps wheelchair user cross six lanes of traffic','An Arkansas man wearing a Spider-Man costume jumped out of his car and helped someone struggling to cross the intersection.','🕸️','#dde8f8','#b8c9e8','','','https://abcnews.com/US/wireStory/spider-man-superhero-jumps-aid-man-wheelchair-cross-135038763'],
+  ['Top','NY1','2 hrs ago','Two men parachute from Seattle’s Space Needle','Police searched for two people who climbed over the 605-foot landmark and parachuted away.','🪂','#d5e8f5','#a8c4dd','new','','https://www.fox13seattle.com/news/base-jumpers-space-needle'],
+  ['Top','AP News','3 hrs ago','Canadian town finally getting rid of 20-year-old rotten fish sauce','About 110 abandoned tanks, each holding thousands of gallons of fermenting fish sauce, had been stinking up the town for years.','🧪','#f5e6d5','#ddc8a8','','','https://abcnews.com/International/wireStory/rotten-fish-sauce-long-stunk-small-canadian-town-135209053'],
+  ['International','AP News','25 min ago','Town finally gets relief from abandoned fish-sauce factory','A bizarre environmental cleanup involving fermented fish sauce that had been sitting around for more than two decades.','🏭','#e0d5f0','#c5b3dd','','','https://abcnews.com/International/wireStory/rotten-fish-sauce-long-stunk-small-canadian-town-135209053'],
+  ['International','AP News','1 hr ago','Giant nutcracker becomes a town attraction in Minnesota','A tiny community now has an enormous patriotic wooden soldier towering over it.','🪖','#f0e8d5','#ddd0b3','','','https://abcnews.com/Weird/wireStory/minnesota-town-now-boasts-worlds-tallest-nutcracker-134944487'],
+  ['International','AP News','2 hrs ago','The world’s slowest concert continues toward the year 2640','An organ in Germany is playing a John Cage composition so slowly that the performance will continue for centuries.','🎹','#d5e0f0','#b3c5dd','new','','https://en.wikipedia.org/wiki/As_Slow_as_Possible'],
+  ['Local','SoraNews24','40 min ago','Rural Japanese landscape looks almost exactly like a Monet painting','A relatively obscure Japanese location has attracted attention because of its remarkably painterly scenery.','🎨','#d5f0e8','#b3ddc5','','https://soranews24.com/wp-content/uploads/sites/3/2026/08/8_70a3b2.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/12/beautiful-off-the-beaten-path-spot-near-samurai-castle-in-rural-japan-looks-like-a-monet-painting/'],
+  ['Local','SoraNews24','1 hr ago','Japanese bank gets an extremely unexpected visitor','A deer wandered into a Japanese bank, prompting police to respond to what initially looked like a much more serious incident.','🦌','#f0e8d5','#ddd0b3','breaking','https://soranews24.com/wp-content/uploads/sites/3/2026/04/db-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/05/01/police-in-japan-summoned-to-deal-with-bank-intruder-who-is-also-a-deervideo/'],
+  ['Coupons','SoraNews24','35 min ago','Japanese arcade turns winning into an actual food experience','Japanese crane-game culture continues producing bizarre prize concepts, including games involving food.','🎮','#f5e0d5','#ddc0a8','','',''],
+  ['Coupons','SoraNews24','1 hr ago','Vending machine sells freshly squeezed lemon juice with a light show','Instead of simply dispensing a drink, the machine puts on a futuristic presentation while preparing it.','🍋','#f5f0d5','#dddab3','new','','https://soranews24.com/2026/08/02/japanese-vending-machine-serves-up-freshly-squeezed-lemon-juice-with-a-futuristic-light-show/'],
+  ['Coupons','SoraNews24','2 hrs ago','Daiso sells a tiny stress-relief punching bag','The 100-yen shop’s bizarre product lineup now includes a miniature bag intended for venting frustration.','🥊','#f0d5d5','#ddb3b3','','',''],
+  ['naniJAPAN+','Discover Wildlife','20 min ago','Parasitic Japanese plant caught interacting with an unexpected animal','Researchers studying a mushroom-like parasitic plant on Ishigaki Island captured an unexpected ecological interaction.','🍄','#e8f0d5','#c5ddb3','new','',''],
+  ['naniJAPAN+','AP News','45 min ago','Organ performance won’t finish until 2640','A German musical project has effectively turned “slow music” into a centuries-long experiment.','🎶','#d5d5f0','#b3b3dd','','','https://en.wikipedia.org/wiki/As_Slow_as_Possible'],
+  ['naniJAPAN+','Young Post Club','1 hr ago','Scientists discover an unusual fluorescent spider','A scientific expedition documented a spider that fluoresces under ultraviolet light.','🕷️','#e0d5f5','#c0a8dd','','',''],
+  ['naniJAPAN+','Young Post Club','2 hrs ago','Scientists are harvesting electricity from soil in Japan','Researchers are investigating ways of generating usable electrical energy from microorganisms and soil.','⚡','#d5e8f0','#b3c5dd','','',''],
+  ['Entertainment','SoraNews24','15 min ago','Hello Kitty × Godzilla Happy Meals are happening','The Sanrio character and giant monster are being mashed together for McDonald’s merchandise, although notably not in Japan.','🍣','#f5d5e0','#ddb3c0','breaking','https://soranews24.com/wp-content/uploads/sites/3/2026/08/md-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/13/hello-kitty-x-godzilla-happy-meals-are-coming-to-mcdonalds-but-not-in-japan-video/'],
+  ['Entertainment','SoraNews24','50 min ago','Yuzuru Hanyu × Winnie-the-Pooh merchandise launches','The Japanese skating star’s famous Pooh association has turned into an official crossover merchandise project.','⛸️','#f5f0d5','#dddab3','','https://soranews24.com/wp-content/uploads/sites/3/2026/08/1_1a7b8e.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/12/japanese-figure-skating-star-yuzuru-hanyu-and-winne-the-pooh-announce-crossover-merch-line-pics/'],
+  ['Entertainment','SoraNews24','1 hr ago','Studio Ghibli gives Jiji a baby plush','Kiki’s Delivery Service’s black cat gets an unusually cute new merchandise variation.','🐈‍⬛','#e0d5f0','#c5b3dd','new','https://soranews24.com/wp-content/uploads/sites/3/2026/08/Studio-Ghibli-anime-shop-Japan-Jiji-Kikis-Delivery-Service-plush-toy-soft-plushie-film-movie-character-Donguri-Kyowakoku-merchandise-earrings-jewelry-accessories-news-1-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/12/studio-ghibli-adds-new-jijis-baby-plush-toy-to-its-anime-merchandise-range-in-japan/'],
+  ['Entertainment','SoraNews24','2 hrs ago','Anime twist comes to Akita’s famous Kanto Festival','A traditional Japanese summer festival has added an anime-themed component with newly drawn character artwork.','🏮','#f5e8d5','#ddd0b3','','',''],
+  ['Sports','AP News','30 min ago','Baseball run scored without the runner tagging up','The Red Sox produced an extremely strange baserunning play involving a sacrifice fly.','⚾','#d5f0d5','#b3ddb3','','',''],
+  ['Sports','Sporting Wire','1 hr ago','Dogs compete in a surfing championship','Four-legged competitors hit the waves in an actual organized surfing competition.','🏄','#d5e8f5','#b3c8dd','new','',''],
+  ['Sports','Sporting Wire','3 hrs ago','Man sets a bizarre hula-hoop record','The Guinness-record style challenge involved an extraordinary number of hoops being spun simultaneously.','⭕','#f0d5e8','#ddb3c5','','',''],
+  ['Roundup','UPI','10 min ago','Mystery cat cutouts appear in vacant lots','Strange cat-shaped silhouettes have reportedly been installed as an apparent way to discourage owls.','🐱','#e8e0f5','#c8b8dd','breaking','',''],
+  ['Roundup','SoraNews24','28 min ago','Japanese vending machine sells freshly squeezed lemon juice','Complete with an unexpectedly elaborate light display.','🍋','#f5f0d5','#dddab3','','','https://soranews24.com/2026/08/02/japanese-vending-machine-serves-up-freshly-squeezed-lemon-juice-with-a-futuristic-light-show/'],
+  ['Roundup','AP News','1 hr ago','A 65-foot nutcracker takes over a Minnesota town','Luverne’s enormous patriotic wooden soldier now towers over the community.','🪖','#e8d5f0','#c5b3dd','','','https://abcnews.com/Weird/wireStory/minnesota-town-now-boasts-worlds-tallest-nutcracker-134944487'],
+  ['Roundup','NY1','2 hrs ago','Two people parachute from the Space Needle','Police searched for the pair who scaled the 605-foot landmark and jumped.','🪂','#d5e0f5','#b3c0dd','','','https://www.fox13seattle.com/news/base-jumpers-space-needle'],
+  ['Roundup','AP News','3 hrs ago','Town spends millions removing decades-old rotten fish sauce','About 110 abandoned tanks of fermenting fish sauce had been stinking up a Canadian town for years.','💸','#f5e0d5','#ddc0a8','','','https://abcnews.com/International/wireStory/rotten-fish-sauce-long-stunk-small-canadian-town-135209053'],
+  ['Domestic','AP News','22 min ago','Japan’s monkey celebrity Punch receives thousands of birthday messages','The orphaned macaque’s first birthday became an international fan event.','🎉','#f5e0d5','#ddc0a8','','','https://abc7.com/post/japans-monkey-sensation-punch-gets-thousands-birthday-messages-he-turns-1-sunday/19579247/'],
+  ['Domestic','SoraNews24','55 min ago','Deer walks into a Japanese bank and brings police','The unexpected visitor prompted a response to what initially looked like a much more serious incident.','🏦','#d5e8f0','#b3c5dd','','https://soranews24.com/wp-content/uploads/sites/3/2026/04/db-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/05/01/police-in-japan-summoned-to-deal-with-bank-intruder-who-is-also-a-deervideo/'],
+  ['Domestic','SoraNews24','2 hrs ago','Japan’s vending machines continue getting increasingly specific','Recent machines include fresh lemon juice and other highly specialized products.','🎰','#e0f0d5','#c0ddb3','','',''],
+  ['Domestic','SoraNews24','3 hrs ago','Japan now has “human refrigerators”','A bizarre response to extreme summer heat that puts the focus on cooling people rather than food.','❄️','#d5e8f5','#b3c8e0','new','https://soranews24.com/wp-content/uploads/sites/3/2026/07/Human-refrigerator-Japan-Do-hiemon-box-cooling-summer-heat-how-to-cope-heatstroke-countermeasures-global-warming-news-01-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/07/18/japan-now-has-human-refrigerators-aims-to-help-save-lives-in-summer/'],
+  ['Politics','BBC','1 hr ago','Count Binface continues his deliberately absurd political campaign','The fictional-looking candidate is actually a real satirical political candidate in the UK.','🎖️','#e0d5f0','#c5b3dd','','','https://en.wikipedia.org/wiki/Count_Binface'],
+  ['Politics','AP News','2 hrs ago','Giant Uncle Sam nutcracker becomes a civic attraction','A town’s bizarre patriotic landmark is arguably more entertaining than most political news.','🎩','#dde8f5','#b8c5e0','','','https://abcnews.com/Weird/wireStory/minnesota-town-now-boasts-worlds-tallest-nutcracker-134944487'],
+  ['Economy','AP News','40 min ago','Canadian town spends millions cleaning up abandoned fish sauce','An extremely unusual economic and environmental cleanup involving 110 tanks of fermented sauce.','💰','#d5f0e8','#b3ddc5','','','https://abcnews.com/International/wireStory/rotten-fish-sauce-long-stunk-small-canadian-town-135209053'],
+  ['Economy','AP News','1 hr ago','Tiny Minnesota town turns enormous nutcracker into a tourist attraction','An unusual example of a community building tourism around something extremely specific.','📊','#e8e0f0','#c8b8dd','','','https://abcnews.com/Weird/wireStory/minnesota-town-now-boasts-worlds-tallest-nutcracker-134944487'],
+  ['Economy','SoraNews24','2 hrs ago','Japan’s vending-machine economy keeps getting stranger','Specialized machines are appearing for increasingly niche products and experiences.','💴','#f0e8d5','#ddd0a8','','',''],
+  ['Technology','AP News','25 min ago','School pauses plans for a humanoid robot teacher','A New York school district put the plan on hold after backlash.','🤖','#d5d8f5','#b3b8e0','breaking','',''],
+  ['Technology','SoraNews24','1 hr ago','Japanese vending machines are getting theatrical','One new machine prepares fresh lemon juice while putting on a light show.','🎭','#f5f0d5','#dddab3','','','https://soranews24.com/2026/08/02/japanese-vending-machine-serves-up-freshly-squeezed-lemon-juice-with-a-futuristic-light-show/'],
+  ['Technology','Young Post Club','2 hrs ago','Scientists are harvesting electricity from soil','An unusual approach to small-scale energy generation is being investigated in Japan.','🔋','#d5f0d5','#b3ddb3','','',''],
+  ['Technology','Young Post Club','3 hrs ago','Fluorescent spider discovered on expedition','Researchers documented a spider that glows under UV light.','🔬','#e0d5f5','#c0a8dd','new','',''],
+  ['Infectious Disease','Discover Wildlife','1 hr ago','Scientists investigate a bizarre plant-and-animal relationship','Researchers studying a parasitic Japanese plant captured unexpected behavior involving another species.','🌿','#d5f0e0','#b3ddc0','','',''],
+  ['Infectious Disease','Young Post Club','2 hrs ago','Scientists investigate electricity-producing microorganisms in Japanese soil','An unusual biological-energy story from the science side of ecology.','🧫','#e8f0d5','#c5ddb3','','',''],
+  ['Topics','AP News','15 min ago','A German organ is playing music until 2640','The centuries-long John Cage performance continues in Halberstadt.','🎹','#d5d5f5','#b3b3e0','','','https://en.wikipedia.org/wiki/As_Slow_as_Possible'],
+  ['Topics','AP News','35 min ago','Minnesota town has the world’s tallest nutcracker','Luverne’s 66-foot “Verne the Patriot” towers over the community.','🪖','#e8d5f0','#c5b3dd','','','https://abcnews.com/Weird/wireStory/minnesota-town-now-boasts-worlds-tallest-nutcracker-134944487'],
+  ['Topics','AP News','1 hr ago','Spider-Man costume wearer becomes an actual neighborhood hero','An Arkansas man in a Spider-Man suit helped a wheelchair user cross a busy intersection.','🦸','#dde5f5','#b3c0e0','','','https://abcnews.com/US/wireStory/spider-man-superhero-jumps-aid-man-wheelchair-cross-135038763'],
+  ['Topics','AP News','2 hrs ago','Canadian town removes 20-year-old fish sauce','About 110 tanks of fermenting fish sauce are finally being cleaned up.','🧹','#f0e8d5','#ddd0b3','','','https://abcnews.com/International/wireStory/rotten-fish-sauce-long-stunk-small-canadian-town-135209053'],
+  ['Topics','AP News','3 hrs ago','Japanese monkey becomes an international birthday celebrity','Punch the macaque received thousands of messages from fans around the world.','🎂','#f5e0d5','#ddc0a8','','','https://abc7.com/post/japans-monkey-sensation-punch-gets-thousands-birthday-messages-he-turns-1-sunday/19579247/'],
+  ['Food','SoraNews24','12 min ago','7-Eleven Japan launches a chocolate-mint sandwich','The convenience-store chain is once again combining flavors that sound more like dessert experiments than sandwiches.','🍫','#d5f0e0','#b3ddc0','new','',''],
+  ['Food','SoraNews24','38 min ago','7-Eleven Japan launches a chilled grilled-corn soup smoothie','A genuinely strange combination aimed at pushing the boundaries of convenience-store drinks.','🌽','#f5f0d5','#dddab3','','',''],
+  ['Food','SoraNews24','1 hr ago','Tokyo gets “350% Pudding Soft Serve”','A dessert intentionally turned into an extreme pudding experience.','🍮','#f5e8d5','#ddd0b3','breaking','https://soranews24.com/wp-content/uploads/sites/3/2026/08/350-Pudding-Soft-Serve-Ginza-Japanese-sweets-store-Purin-Kenkyujo-dessert-ice-cream-shop-Tokyo-news-5.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/13/tokyo-sweets-store-has-a-350-pudding-soft-serve-and-people-are-going-wild-for-it/'],
+  ['Food','SoraNews24','2 hrs ago','Japan gets a beer glass that makes you drink water','The divided glass tips over or splashes water at you if you drink only the beer.','🍺','#f0e8d5','#ddd0a8','','https://soranews24.com/wp-content/uploads/sites/3/2026/08/2_d1595a.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/09/japans-new-beer-glass-is-designed-to-force-you-to-drink-water-video/'],
+  ['Food','SoraNews24','3 hrs ago','Seaweed bread becomes one of Japan’s strangest baked goods','A Tokyo bakery experiment incorporates seaweed into bread.','🍞','#d5e8d5','#b3c5b3','','',''],
+  ['Columns','Research Digest','30 min ago','Why conspiracy theories can spread from one belief to another','Researchers have been examining how adopting one unusual belief can make related beliefs more likely.','🧠','#e8d5f5','#c5a8dd','','',''],
+  ['Columns','Research Digest','1 hr ago','Can an AI conversation change someone’s beliefs?','Researchers have been testing whether conversational AI can alter people’s confidence in questionable claims.','💭','#d5e0f5','#b3c0dd','','',''],
+  ['Columns','SoraNews24','2 hrs ago','Why people become fascinated by extremely strange products','Japan’s increasingly bizarre convenience-store and vending-machine culture provides a perfect real-world example.','🛒','#f5e0e0','#ddb8b8','','',''],
+  ['Animals','AP News','8 min ago','Punch the Japanese macaque becomes a birthday celebrity','Thousands of people sent birthday messages to the orphaned monkey.','🐒','#f5e0c8','#ddc0a0','','','https://abc7.com/post/japans-monkey-sensation-punch-gets-thousands-birthday-messages-he-turns-1-sunday/19579247/'],
+  ['Animals','SoraNews24','42 min ago','Deer wanders into a Japanese bank','Police were called because the unexpected visitor looked like a bizarre intruder.','🦌','#e0f0d5','#c0ddb3','','https://soranews24.com/wp-content/uploads/sites/3/2026/04/db-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/05/01/police-in-japan-summoned-to-deal-with-bank-intruder-who-is-also-a-deervideo/'],
+  ['Animals','ZME Science','1 hr ago','Wild boars are hunting rabbits on Japan’s famous Rabbit Island','An unexpected ecological development on an island famous for its rabbits.','🐗','#f5e8d5','#ddd0b3','breaking','',''],
+  ['Animals','Discover Wildlife','2 hrs ago','Parasitic Japanese plant filmed interacting with hermit crabs','Researchers captured an unexpected ecological relationship that hadn’t been observed in this way before.','🦀','#d5e8e8','#b3c8c8','','',''],
+  ['Animals','Sporting Wire','3 hrs ago','Dogs compete in surfing competitions','Yes, this is an actual organized sporting event with four-legged wave riders.','🐕','#d5e8f5','#b3c8dd','','',''],
+  ['Family','AP News','45 min ago','Japanese zoo monkey’s first birthday becomes an international event','Fans from around the world sent messages to Punch the macaque.','🎈','#f5d5e0','#ddb3c0','','','https://abc7.com/post/japans-monkey-sensation-punch-gets-thousands-birthday-messages-he-turns-1-sunday/19579247/'],
+  ['Family','SoraNews24','2 hrs ago','Japanese university welcomes a baby deer','The animal was born on campus and received an amusingly academic-style welcome.','🏫','#e0e8d5','#c0c8b3','new','https://soranews24.com/wp-content/uploads/sites/3/2026/06/nd-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/06/16/japanese-university-welcomes-birth-of-baby-deer-on-campus-president-waives-entrance-examvideos/'],
+  ['Careers','AP News','50 min ago','School considers a humanoid robot teacher','The plan was unusual enough to generate major backlash and was subsequently paused.','👨‍🏫','#d5d8f5','#b3b8e0','','',''],
+  ['Careers','SoraNews24','1 hr ago','Japanese workers can now buy air-conditioned shirts','Wearable cooling technology is becoming increasingly elaborate as Japanese summers get hotter.','👕','#d5f0f0','#b3dddd','','https://soranews24.com/wp-content/uploads/sites/3/2026/07/0_fcbd1b.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/02/air-conditioned-dress-shirts-arrive-in-japan-to-save-working-professionals-from-sweltering-heat/'],
+  ['Careers','SoraNews24','2 hrs ago','Japanese companies experimenting with increasingly strange workplace gadgets','Cooling gear and unusual consumer technology are becoming part of everyday working life.','💼','#e8e0d5','#c8c0b3','','',''],
+  ['Living','SoraNews24','20 min ago','Japan develops “human refrigerators”','Cooling rooms designed around people rather than food.','🧊','#d5e8f5','#b3c8e0','new','https://soranews24.com/wp-content/uploads/sites/3/2026/07/Human-refrigerator-Japan-Do-hiemon-box-cooling-summer-heat-how-to-cope-heatstroke-countermeasures-global-warming-news-01-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/07/18/japan-now-has-human-refrigerators-aims-to-help-save-lives-in-summer/'],
+  ['Living','SoraNews24','48 min ago','Air-conditioned dress shirts arrive in Japan','Clothing with built-in cooling technology is being marketed to people dealing with summer heat.','💨','#d5f0e8','#b3ddc5','','https://soranews24.com/wp-content/uploads/sites/3/2026/07/0_fcbd1b.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/02/air-conditioned-dress-shirts-arrive-in-japan-to-save-working-professionals-from-sweltering-heat/'],
+  ['Living','SoraNews24','1 hr ago','Beer glass forces you to drink water','The glass physically punishes you for ignoring the water compartment.','💧','#d5e0f5','#b3c0dd','','https://soranews24.com/wp-content/uploads/sites/3/2026/08/2_d1595a.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/09/japans-new-beer-glass-is-designed-to-force-you-to-drink-water-video/'],
+  ['Living','SoraNews24','2 hrs ago','Daiso sells a miniature stress-relief punching bag','The 100-yen shop’s bizarre product lineup now includes a tiny bag for venting frustration.','🥊','#f0d5d5','#ddb3b3','','',''],
+  ['Living','SoraNews24','3 hrs ago','Japan’s vending machines become increasingly specialized','Fresh lemon juice, unusual drinks and other niche products are being sold automatically.','🥤','#f5f0d5','#dddab3','','',''],
+  ['Anime','SoraNews24','18 min ago','Baby Jiji plush arrives in Japan','Kiki’s Delivery Service’s black cat gets an adorable new merchandise variation.','🐈‍⬛','#e0d5f5','#c5b3dd','new','https://soranews24.com/wp-content/uploads/sites/3/2026/08/Studio-Ghibli-anime-shop-Japan-Jiji-Kikis-Delivery-Service-plush-toy-soft-plushie-film-movie-character-Donguri-Kyowakoku-merchandise-earrings-jewelry-accessories-news-1-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/12/studio-ghibli-adds-new-jijis-baby-plush-toy-to-its-anime-merchandise-range-in-japan/'],
+  ['Anime','SoraNews24','52 min ago','Ghibli’s Jiji gets a new music box','The beloved black cat from Kiki’s Delivery Service inspires a collectible music box.','🎵','#f0d5e8','#ddb3c5','','https://soranews24.com/wp-content/uploads/sites/3/2026/08/Studio-Ghibli-anime-shop-Japan-Kikis-Delivery-Service-Jiji-Music-Box-telephone-message-box-1-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/10/studio-ghibli-releases-new-kikis-delivery-service-jiji-music-box-for-anime-fans/'],
+  ['Anime','SoraNews24','1 hr ago','Anime collaboration takes over Akita’s Kanto Festival','A traditional Japanese summer festival has added an anime-themed component with newly drawn character artwork.','🏮','#f5e0d5','#ddc0a8','','',''],
+  ['Anime','SoraNews24','2 hrs ago','Hello Kitty and Godzilla combined in a McDonald’s promotion','Cute meets kaiju in an unexpected fast-food merchandise crossover.','🍔','#f5d5d5','#ddb3b3','','https://soranews24.com/wp-content/uploads/sites/3/2026/08/md-1.jpg?w=310&h=200&crop=1','https://soranews24.com/2026/08/13/hello-kitty-x-godzilla-happy-meals-are-coming-to-mcdonalds-but-not-in-japan-video/'],
+  ['Love','Tech Review','1 hr ago','Tokyo’s AI matchmaking experiment produces real couples','A government-backed matchmaking service has been experimenting with AI-assisted partner matching.','💑','#f5d5e8','#ddb3c5','','',''],
+  ['Love','Tech Review','2 hrs ago','Dating algorithms studied as a source of strange human behavior','Researchers are examining how tiny changes in displayed information can alter who gets attention on matchmaking platforms.','📱','#e8d5f0','#c5b3dd','','',''],
+  ['Points','SoraNews24','30 min ago','Japan’s point-collecting culture has become an everyday hobby','Multiple shopping and payment ecosystems compete to give consumers points.','💳','#f5f0d5','#dddab3','','',''],
+  ['Points','SoraNews24','1 hr ago','Japanese vending machines increasingly turn purchases into experiences','Some machines don’t merely sell something; they make the purchase itself part of the attraction.','🎰','#e0d5f5','#c5b3dd','','',''],
+  ['Points','SoraNews24','2 hrs ago','Daiso’s bizarre products turn tiny purchases into novelty experiences','Japan’s discount stores demonstrate how small price tags can still deliver maximum weirdness.','🎁','#f5e0e8','#ddb8c5','','',''],
+  ['Apps','Tech Review','22 min ago','Tokyo’s AI matchmaking service finds real partners','A government-backed experiment in finding partners through technology.','💻','#d5e0f5','#b3c0dd','','',''],
+  ['Apps','SoraNews24','55 min ago','Japan’s flea-market app has to explicitly prohibit certain bizarre listings','Mercari recently reminded users about items that cannot be sold on the platform.','🚫','#f5d5d5','#ddb3b3','new','',''],
+  ['Apps','SoraNews24','2 hrs ago','Japan’s increasingly specialized vending machines behave almost like physical apps','Find a machine, choose a niche product, get an unusually elaborate experience.','📲','#d5f0e8','#b3ddc5','','',''],
+  ['Apps','SoraNews24','3 hrs ago','New tech ecosystem making everyday Japanese services increasingly automated','Shopping, vending, payments and matchmaking are all getting the automation treatment.','🔄','#e8e0f0','#c8b8dd','','','']
+];
+
+
+/* =========================================================
+   FEATURED STORIES PER CHANNEL
+========================================================= */
+
+const featuredMap={};
+channels.forEach(c=>{
+  const a=articles.find(x=>x[0]===c.name);
+  if(a) featuredMap[c.name]=a;
+});
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+const notifications=[
+  {icon:'\u{1F412}',title:'Breaking',text:"Punch the monkey turns 1 \u2014 thousands send birthday wishes",time:'2m ago'},
+  {icon:'\u{1F431}',title:'Weird',text:'Mystery cat cutouts appearing in vacant lots across US',time:'18m ago'},
+  {icon:'\u{1F98C}',title:'Local',text:'A deer just walked into a bank in Japan',time:'1h ago'},
+  {icon:'\u{1FA82}',title:'Breaking',text:'Two people parachuted off the Space Needle',time:'2h ago'},
+  {icon:'\u{1F36E}',title:'Food',text:'350% Pudding Soft Serve is now a thing in Tokyo',time:'3h ago'}
+];
+
+
+let active = 'Top';
+
+
+/* =========================================================
+   ARTICLE COUNTS PER CHANNEL
+========================================================= */
+
+function countForChannel(name){
+  return articles.filter(a=>a[0]===name).length;
+}
+
+
+/* =========================================================
+   MENU RENDERING
+========================================================= */
+
+function renderMenus(){
+
+  const h = document.getElementById('horizontalNav');
+  const v = document.getElementById('verticalNav');
+  const d = document.getElementById('drawerNav');
+
+  h.innerHTML = channels.map(c => {
+    const cnt=countForChannel(c.name);
+    return `
+      <button
+        class="h-channel ${c.name === active ? 'active' : ''}"
+        data-channel="${c.name}"
+        style="--channel-bg:${c.color};--channel-fg:${c.fg};">
+        <span class="h-icon">${c.icon}</span>
+        <span>${c.name}</span>
+        ${cnt?'<span class="h-count">'+cnt+'</span>':''}
+      </button>
+    `;
+  }).join('');
+
+  const makeV=(c,cls)=>{
+    const cnt=countForChannel(c.name);
+    return `
+      <button
+        class="${cls} ${c.name === active ? 'active' : ''}"
+        data-channel="${c.name}">
+        <span class="v-icon">${c.icon}</span>
+        ${c.name}
+        ${cnt?'<span class="v-count">'+cnt+'</span>':''}
+      </button>
+    `;
+  };
+
+  v.innerHTML = channels.map(c => makeV(c, 'v-channel')).join('');
+  d.innerHTML = channels.map(c => makeV(c, 'v-channel')).join('');
+
+  document.querySelectorAll('[data-channel]').forEach(button => {
+    button.onclick = () => selectChannel(button.dataset.channel);
+  });
+}
+
+
+/* =========================================================
+   SELECT CHANNEL
+========================================================= */
+
+function selectChannel(name){
+  active = name;
+  document.getElementById('sectionTitle').textContent = name;
+  renderMenus();
+  renderFeed();
+  renderFeatured();
+  document.getElementById('drawerBackdrop').classList.remove('open');
+}
+
+
+/* =========================================================
+   FEATURED
+========================================================= */
+
+function renderFeatured(){
+  const a=featuredMap[active]||articles[0];
+  document.getElementById('featuredTitle').textContent=a[3];
+  document.getElementById('featuredDesc').textContent=a[4];
+  document.getElementById('featuredSource').textContent=a[1];
+  const fi=document.getElementById('featuredImg');
+  const fe=document.getElementById('featuredEmoji');
+  if(a[9]){
+    fi.src=a[9];fi.style.display='block';fe.style.display='none';
+    fi.onerror=function(){fi.style.display='none';fe.style.display='';fe.textContent=a[5];};
+  }else{
+    fi.style.display='none';fe.style.display='';fe.textContent=a[5];
+  }
+  document.getElementById('featuredArt').style.background=
+    'linear-gradient(140deg,'+a[6]+','+a[7]+')';
+}
+
+
+/* =========================================================
+   FEED
+========================================================= */
+
+function renderFeed(){
+
+  let list = articles.filter(a => a[0] === active);
+  if(!list.length) list = articles.slice(0,4);
+
+  document.getElementById('feed').innerHTML = list.map((a,i) => {
+    const gIdx=articles.indexOf(a);
+    const bk=bookmarks.has(gIdx);
+    let badgeHTML='';
+    if(a[8]==='breaking') badgeHTML='<span class="badge badge-breaking">BREAKING</span>';
+    else if(a[8]==='new') badgeHTML='<span class="badge badge-new">NEW</span>';
+
+    return `
+      <article class="article">
+        <div class="article-img"
+          style="background:linear-gradient(135deg,${a[6]},${a[7]})">
+          ${a[9]
+            ? `<img class="article-thumb-img" src="${a[9]}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display=''"><span class="article-thumb" style="display:none">${a[5]}</span>`
+            : `<span class="article-thumb">${a[5]}</span>`
+          }
+        </div>
+        <div class="article-body">
+          <div class="eyebrow">${badgeHTML}${a[0]}</div>
+          ${a[10] ? `<h3><a href="${a[10]}" target="_blank" rel="noopener">${a[3]}</a></h3>` : `<h3>${a[3]}</h3>`}
+          <p>${a[4]}</p>
+          <div class="article-meta">
+            <span>${a[1]}</span>
+            <span>\u00B7</span>
+            <span>${a[2]}</span>
+            ${a[10] ? `<a href="${a[10]}" target="_blank" rel="noopener" style="color:var(--accent);font-weight:700;text-decoration:none;font-size:11px">Full story ↗</a>` : ''}
+            <div class="article-actions">
+              <button class="act-btn ${bk?'bookmarked':''}" onclick="toggleBookmark(${gIdx})" title="Bookmark">${bk?'\u2665':'\u2661'}</button>
+              <button class="act-btn" onclick="shareArticle(${gIdx})" title="Share">\u21A9</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+
+/* =========================================================
+   CHANNEL MANAGER
+========================================================= */
+
+function renderManager(){
+  const box = document.getElementById('managerList');
+  box.innerHTML = channels.map((c,i) => `
+    <div class="manager-row" draggable="true" data-index="${i}">
+      <div class="check">\u2713</div>
+      <div class="micon">${c.icon}</div>
+      <div>
+        <div class="mname">${c.name}</div>
+        <div class="mdesc">${c.desc}</div>
+      </div>
+      <div class="handle">\u2261</div>
+    </div>
+  `).join('');
+
+  let drag;
+  box.querySelectorAll('.manager-row').forEach(row => {
+    row.addEventListener('dragstart', () => { drag = row; row.classList.add('dragging'); });
+    row.addEventListener('dragend', () => { row.classList.remove('dragging'); });
+    row.addEventListener('dragover', e => {
+      e.preventDefault();
+      const after = [...box.querySelectorAll('.manager-row:not(.dragging)')].find(el =>
+        e.clientY < el.getBoundingClientRect().top + el.offsetHeight / 2
+      );
+      if(after) box.insertBefore(drag, after); else box.appendChild(drag);
+    });
+    row.addEventListener('click', e => { if(!e.target.closest('.handle')) row.remove(); });
+  });
+}
+
+function openManager(){
+  document.getElementById('manager').classList.add('open');
+  renderManager();
+}
+
+function closeManager(){
+  document.getElementById('manager').classList.remove('open');
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function doSearch(query){
+  const results = document.getElementById('results');
+  const q = query.trim().toLowerCase();
+
+  if(!q){
+    results.innerHTML = '<div class="no-results">Start typing to search the news.</div>';
+    return;
+  }
+
+  const hits = articles.filter(article => article.slice(0,6).join(' ').toLowerCase().includes(q));
+
+  if(!hits.length){
+    results.innerHTML = '<div class="no-results"><strong>No stories found</strong><div style="margin-top:6px">Try another keyword.</div></div>';
+    return;
+  }
+
+  results.innerHTML = hits.map((article, index) => `
+    <div class="result" data-result-index="${index}">
+      <strong>${article[5]} ${article[3]}</strong>
+      <small>${article[1]} \u00B7 ${article[0]} \u00B7 ${article[2]}</small>
+      <div class="result-description">${article[4]}</div>
+    </div>
+  `).join('');
+
+  results.querySelectorAll('.result').forEach((result, index) => {
+    result.addEventListener('click', () => {
+      closeSearch();
+      selectChannel(hits[index][0]);
+      setTimeout(() => {
+        const feed = document.getElementById('feed');
+        if(feed) feed.scrollIntoView({behavior:'smooth',block:'start'});
+      }, 100);
+    });
+  });
+}
+
+function openSearch(){
+  const overlay = document.getElementById('searchOverlay');
+  const searchInput = document.getElementById('searchInput');
+  const quickSearch = document.getElementById('quickSearch');
+  searchInput.value = quickSearch.value;
+  overlay.classList.add('open');
+  doSearch(searchInput.value);
+  setTimeout(() => {
+    searchInput.focus();
+    searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+  }, 50);
+}
+
+function closeSearch(){
+  document.getElementById('searchOverlay').classList.remove('open');
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+function renderNotifications(){
+  document.getElementById('notifList').innerHTML=notifications.map(n=>`
+    <div class="notif-item">
+      <div class="notif-icon">${n.icon}</div>
+      <div class="notif-text">
+        <strong>${n.title}</strong>
+        ${n.text}
+        <br><span>${n.time}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+renderNotifications();
+
+document.getElementById('notifBtn').onclick=()=>{
+  const p=document.getElementById('notifPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')){
+    document.getElementById('notifDot').style.display='none';
+  }
+};
+
+document.getElementById('notifClear').onclick=()=>{
+  document.getElementById('notifDot').style.display='none';
+  showToast('All notifications marked as read');
+  document.getElementById('notifPanel').classList.remove('open');
+};
+
+document.addEventListener('click',e=>{
+  const p=document.getElementById('notifPanel');
+  const b=document.getElementById('notifBtn');
+  if(p.classList.contains('open')&&!p.contains(e.target)&&!b.contains(e.target)){
+    p.classList.remove('open');
+  }
+});
+
+
+/* =========================================================
+   SUBSCRIBE
+========================================================= */
+
+document.getElementById('subBtn').onclick=()=>{
+  const email=document.getElementById('subEmail').value.trim();
+  const area=document.getElementById('subArea');
+  if(!email||!email.includes('@')){
+    showToast('Please enter a valid email address');
+    return;
+  }
+  document.getElementById('subBtn').disabled=true;
+  document.getElementById('subBtn').textContent='Subscribing...';
+  setTimeout(()=>{
+    area.innerHTML=`
+      <div class="sub-success">
+        <div class="check-circle">\u2705</div>
+        <p>You\u2019re subscribed!</p>
+        <small>${email} will get the daily brief.</small>
+      </div>
+    `;
+    showToast('Subscribed to the Daily Brief');
+  },1200);
+};
+
+
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
+renderMenus();
+renderFeed();
+renderFeatured();
+
+
+/* =========================================================
+   MANAGER BUTTONS
+========================================================= */
+
+document.getElementById('openManager').onclick = openManager;
+document.getElementById('openManager2').onclick = openManager;
+document.getElementById('openManager3').onclick = openManager;
+document.getElementById('closeManager').onclick = closeManager;
+
+
+/* =========================================================
+   REFRESH
+========================================================= */
+
+document.getElementById('refresh').onclick = () => {
+  renderFeed();
+  const button = document.getElementById('refresh');
+  button.textContent = 'Refreshed \u2713';
+  showToast('Feed refreshed');
+  setTimeout(() => { button.textContent = 'Refresh \u21BB'; }, 1000);
+};
+
+
+/* =========================================================
+   MOBILE DRAWER
+========================================================= */
+
+document.getElementById('openDrawer').onclick = () => {
+  document.getElementById('drawerBackdrop').classList.add('open');
+};
+
+document.getElementById('closeDrawer').onclick = () => {
+  document.getElementById('drawerBackdrop').classList.remove('open');
+};
+
+document.getElementById('drawerBackdrop').onclick = e => {
+  if(e.target.id === 'drawerBackdrop') e.currentTarget.classList.remove('open');
+};
+
+
+/* =========================================================
+   SEARCH EVENTS
+========================================================= */
+
+document.getElementById('openSearch').onclick = openSearch;
+
+document.getElementById('quickSearch').addEventListener('focus', () => openSearch());
+
+document.getElementById('quickSearch').addEventListener('input', e => {
+  const overlay = document.getElementById('searchOverlay');
+  const searchInput = document.getElementById('searchInput');
+  if(!overlay.classList.contains('open')) overlay.classList.add('open');
+  searchInput.value = e.target.value;
+  doSearch(e.target.value);
+});
+
+document.getElementById('quickSearch').addEventListener('keydown', e => {
+  if(e.key === 'Enter'){ e.preventDefault(); openSearch(); }
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  document.getElementById('quickSearch').value = e.target.value;
+  doSearch(e.target.value);
+});
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if(e.key === 'Enter'){ e.preventDefault(); doSearch(e.target.value); }
+});
+
+document.getElementById('closeSearch').onclick = closeSearch;
+
+document.getElementById('searchOverlay').addEventListener('click', e => {
+  if(e.target.id === 'searchOverlay') closeSearch();
+});
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    closeSearch();
+    closeManager();
+    document.getElementById('drawerBackdrop').classList.remove('open');
+    document.getElementById('notifPanel').classList.remove('open');
+  }
+});
+
+</script>
+
+</body>
